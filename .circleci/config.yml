@@ -1,12 +1,13 @@
 version: 2.1
 orbs:
   node: circleci/node@5.0.1
-jobs:
-  build:
-    docker:
+  docker: circleci/docker@2.1.4 #allows us to use docker orb's commands
+jobs: #instructions for each step
+  build: #build the application. i.e. install dependencies
+    docker: #container to handle the steps
       - image: cimg/node:16.10
     steps:
-      - checkout
+      - checkout #copies the working directory of the project
       - node/install-packages:
           pkg-manager: npm
       - run: |
@@ -22,11 +23,29 @@ jobs:
       - run: |
           echo "Running tests..."
           npm run test
+          #configure a job called build-and-push to publish docker image to the docker hub registry only
+  build-and-push
+    executor:
+    steps:
+      - setup_remote_docker
+      - checkout
+      - docker/check
+      - docker/build:
+          image: farrhanng/education-space
+          tag: 1.0.1
+      - docker/push
+          image: farrhanng/education-space
+          tag: 1.0.1 
 
-workflows:
+workflows: #defines how each job would run and relate to each other and # any other dependent states (ex/ only run if pushed to main branch)
   simple_workflow:
     jobs:
       - build
       - test:
           requires:
             - build
+      - build-and-push:
+          requires:
+            - build
+  
+

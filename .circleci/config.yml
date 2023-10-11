@@ -46,6 +46,6 @@ workflows: #defines how each job would run and relate to each other and # any ot
             - build
       - build-and-push:
           requires:
-            - build
+            - test
   
 

@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   node: circleci/node@5.0.1
   docker: circleci/docker@2.1.4 #allows us to use docker orb's commands
-  heroku: circleci/heroku@2.2.0 #allows us to use heroku obb's commands
+  heroku: circleci/heroku@2.0.0 #allows us to use heroku obb's commands
 jobs: #instructions for each step
   build: #build the application. i.e. install dependencies
     docker: #container to handle the steps

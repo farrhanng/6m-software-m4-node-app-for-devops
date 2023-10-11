@@ -24,8 +24,8 @@ jobs: #instructions for each step
           echo "Running tests..."
           npm run test
           #configure a job called build-and-push to publish docker image to the docker hub registry only
-  build-and-push
-    executor:
+  build-and-push:
+    executor: docker/docker
     steps:
       - setup_remote_docker
       - checkout
@@ -33,7 +33,7 @@ jobs: #instructions for each step
       - docker/build:
           image: farrhanng/education-space
           tag: 1.0.1
-      - docker/push
+      - docker/push:
           image: farrhanng/education-space
           tag: 1.0.1 
 

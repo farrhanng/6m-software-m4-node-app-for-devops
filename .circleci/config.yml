@@ -30,10 +30,10 @@ jobs:
       - checkout
       - docker/check
       - docker/build:
-          image: terencegaffudsu/education-space
+          image: farrhanng/education-space
           tag: <<pipeline.git.tag>>
       - docker/push:
-          image: terencegaffudsu/education-space
+          image: farrhanng/education-space
           tag: <<pipeline.git.tag>>
 
 workflows: 

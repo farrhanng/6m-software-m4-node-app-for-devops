@@ -47,11 +47,11 @@ workflows:
           requires:
             - build
           filters:
-            branches:
+            branches: 
               only: main
-      - build-and-push:
+      - build-and-push: #This should run only if a tag is pushed, not if a branch is pushed.
           filters:
             tags:
-              only: /^v.*/
+              only: /^v.*/ #This only considers tags starting with "v". e.g. v1.0.2
             branches:
-              ignore: /.*/
+              ignore: /.*/  #This ignores all branches

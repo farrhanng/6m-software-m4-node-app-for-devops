@@ -7,13 +7,13 @@ describe("the print function", ()=>{
         jest.clearAllMocks();
     })
 
-    it("should respond with 'Hello I am Farrhan 👋🏽'", ()=>{
+    it("Request and response should be same", ()=>{ //test name
         const mockReq = {};
         const mockRes = {
             send:jest.fn()
         }
 
         targetFn(mockReq, mockRes);
-        expect(mockRes.send).toHaveBeenCalledWith("Hello I am Farrhan 👋🏽"); // If you change this value, the test will fail.
+        expect(mockRes.send).toHaveBeenCalledWith("Hello I'm Terence! I've successfully deployed my code in heroku!"); // If you change this value, the test will fail.
     })
 })

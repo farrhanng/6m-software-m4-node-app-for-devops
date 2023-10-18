@@ -1,13 +1,14 @@
 version: 2.1
-orbs: 
+orbs:
   node: circleci/node@5.0.1
-  docker: circleci/docker@2.1.4 
-jobs: 
-  build: 
-    docker: 
+  docker: circleci/docker@2.1.4
+  snyk: snyk/snyk@1.5.0
+jobs:
+  build:
+    docker:
       - image: cimg/node:16.10
     steps:
-      - checkout 
+      - checkout
       - node/install-packages:
           pkg-manager: npm
       - run: |
@@ -23,35 +24,37 @@ jobs:
       - run: |
           echo "Running tests..."
           npm run test
-  build-and-push:
-    executor: docker/docker 
+  scan:
+    docker:
+      - image: cimg/node:16.10
+    environment:
+      IMAGE_NAME: terencegaffudsu/education-space
     steps:
-      - setup_remote_docker 
       - checkout
+      - setup_remote_docker
       - docker/check
-      - docker/build:
-          image: terencegaffudsu/education-space
-          tag: <<pipeline.git.tag>>
-      - docker/push:
-          image: terencegaffudsu/education-space
-          tag: <<pipeline.git.tag>>
+      - run: docker build -t $IMAGE_NAME .
+      - snyk/scan:
+          docker-image-name: $IMAGE_NAME
 
-workflows: 
+workflows:
   simple_workflow:
     jobs:
       - build:
           filters:
             branches:
               only: main
-      - test: 
+      - test:
           requires:
             - build
           filters:
             branches:
               only: main
-      - build-and-push:
+      # The scan job
+      - scan:
+          requires:
+            - build
           filters:
-            tags:
-              only: /^v.*/
             branches:
-              ignore: /.*/
+              only: main
+      
